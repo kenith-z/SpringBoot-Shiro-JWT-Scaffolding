@@ -1,0 +1,8 @@
+#设置thymeleaf
+spring:
+  profiles:
+    active: dev
+
+#mybatis配置
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**Mapper.xml

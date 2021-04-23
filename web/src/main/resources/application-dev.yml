@@ -1,0 +1,13 @@
+# DataSource Config
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.2.142:3306/hcwblog?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: hcwblog
+    password: DuNiTGxr.2Qp5WcV
+  # redis配置
+  redis:
+    host: 192.168.2.142
+    port: 6379
+    password: Zhang123.
+

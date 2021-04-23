@@ -1,0 +1,13 @@
+# DataSource Config
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://xxxxx:3306/hcwblog?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: xxxxx
+    password: xxxxx
+  # redis配置
+  redis:
+    host: xxxxx
+    port: 6379
+    password: xxxxx
+
