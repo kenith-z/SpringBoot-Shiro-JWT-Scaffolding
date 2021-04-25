@@ -1,12 +1,15 @@
 package xyz.hcworld.service.impl;
 
 
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.validation.ValidationUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import xyz.hcworld.mapper.CurrencyMapper;
 import xyz.hcworld.service.CurrencyService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 
@@ -25,6 +28,7 @@ public class CurrencyServiceImpl implements CurrencyService {
      */
     @Autowired
     CurrencyMapper currencyMapper;
+
 
     @Override
     public Boolean selectExistence(String table, Map<String, Object> map) {

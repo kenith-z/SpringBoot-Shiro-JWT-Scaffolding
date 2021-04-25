@@ -1,6 +1,7 @@
 package xyz.hcworld.service;
 
 
+import xyz.hcworld.common.lang.Result;
 import xyz.hcworld.model.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,5 +14,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @Version： 1.0
  */
 public interface UserService extends IService<User> {
+
+    /**
+     * 注册
+     * @param user 用户实体
+     * @return
+     */
+    Result register(User user);
+
 
 }
