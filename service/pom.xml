@@ -28,6 +28,12 @@
             <artifactId>common</artifactId>
             <version>0.0.1</version>
         </dependency>
+        <dependency>
+            <groupId>xyz.hcworld</groupId>
+            <artifactId>util</artifactId>
+            <version>0.0.1</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
 

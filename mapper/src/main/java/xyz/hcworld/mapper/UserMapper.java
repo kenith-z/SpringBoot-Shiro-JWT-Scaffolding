@@ -13,7 +13,11 @@ import xyz.hcworld.model.User;
  */
 @Component
 public interface UserMapper extends BaseMapper<User> {
-
-
+    /**
+     * 登录查询账户
+     * @param account 账户
+     * @return
+     */
+   User selectUserWhereAccount(String account);
 
 }

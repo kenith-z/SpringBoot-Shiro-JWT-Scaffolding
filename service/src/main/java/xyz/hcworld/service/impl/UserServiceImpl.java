@@ -13,6 +13,7 @@ import xyz.hcworld.mapper.CurrencyMapper;
 import xyz.hcworld.mapper.UserMapper;
 import xyz.hcworld.model.User;
 import xyz.hcworld.service.UserService;
+import xyz.hcworld.util.JwtUtil;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -33,6 +34,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Autowired
     CurrencyMapper currencyMapper;
+    /**
+     * 用户数据操作
+     */
+    @Autowired
+    UserMapper userMapper;
 
     @Override
     public Result register(User user) {
@@ -61,5 +67,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         temp.setModified(LocalDateTime.now());
         temp.setLasted(LocalDateTime.now());
         return this.save(temp) ? Result.success().action("/login") : Result.fail("请稍后再试");
+    }
+
+    @Override
+    public Result login(String account, String password) {
+
+        User user=  userMapper.selectUserWhereAccount(account);
+        if(user==null){
+            return Result.fail("用户不存在");
+        }else if (!user.getPassword().equals(SmUtil.sm3(user.getIv() + password))){
+            return Result.fail("密码错误");
+        }else if (user.getStatus()<0){
+            return Result.fail("账号被封禁");
+        }
+        return Result.success(JwtUtil.sign(user));
     }
 }

@@ -14,3 +14,9 @@ web：控制器相关模块
 ## 更新内容
 1.创建初始结构--2021年4月23日
 2.拆分成聚合工程
+
+## 模块调试
+1.注册
+![img.png](domoImage/register.png)
+2.有user身份访问user接口
+![img.png](domoImage/user.png)

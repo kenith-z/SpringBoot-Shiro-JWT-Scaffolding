@@ -6,3 +6,7 @@ spring:
 #mybatis配置
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**Mapper.xml
+
+#权限
+status:
+  statusMap: {-1: ban,0: user,100: admin}

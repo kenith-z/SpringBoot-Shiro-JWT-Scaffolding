@@ -1,12 +1,19 @@
 package xyz.hcworld.web.controller;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import xyz.hcworld.common.lang.Result;
 import xyz.hcworld.model.User;
+import xyz.hcworld.util.JwtUtil;
+
+import java.io.UnsupportedEncodingException;
 
 /**
  * 用户验证控制器
@@ -36,5 +43,23 @@ public class AuthController extends BaseController {
         return userService.register(user);
     }
 
+    @PostMapping("/login")
+    public Result login(@RequestParam(value="account",defaultValue="") String account,
+                        @RequestParam(value="password",defaultValue="") String password) {
+        //账号密码为空
+        if (StrUtil.isEmpty(account) || StrUtil.isEmpty(password)) {
+            return Result.fail("邮箱或密码不能为空");
+        }
+        //完成登录
+        return userService.login(account,password);
+    }
+
+
+
+    @PostMapping(path = {"/unauthorized","/out"})
+    @RequiresRoles(logical = Logical.OR, value = {"user", "admin"})
+    public ResponseEntity<Result> unauthorized()  {
+        return new ResponseEntity<>(Result.fail("退出成功"), HttpStatus.UNAUTHORIZED);
+    }
 
 }

@@ -11,3 +11,6 @@ spring:
     port: 6379
     password: Zhang123.
 
+jwt:
+  secret: 123456
+  expireTime: 86400000

@@ -2,6 +2,12 @@ package xyz.hcworld.common.exception;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.ShiroException;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authz.UnauthenticatedException;
+import org.apache.shiro.authz.UnauthorizedException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,6 +25,26 @@ import xyz.hcworld.common.lang.Result;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+
+    /**
+     * 捕捉shiro的异常
+     */
+    @ExceptionHandler(ShiroException.class)
+    public ResponseEntity handle401() {
+        return new ResponseEntity<>(Result.fail("权限异常，请重新登录"), HttpStatus.UNAUTHORIZED);
+    }
+
+
+
+    /**
+     * 捕捉身份认证的AccountRealm类异常
+     */
+    @ExceptionHandler(AuthenticationException.class)
+    public Result handle401(AuthenticationException e) {
+        System.out.println("1");
+        return Result.fail(e.getMessage());
+    }
 
 
     /**
