@@ -11,9 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import xyz.hcworld.common.lang.Result;
 import xyz.hcworld.model.User;
-import xyz.hcworld.util.JwtUtil;
 
-import java.io.UnsupportedEncodingException;
 
 /**
  * 用户验证控制器
@@ -48,7 +46,7 @@ public class AuthController extends BaseController {
                         @RequestParam(value="password",defaultValue="") String password) {
         //账号密码为空
         if (StrUtil.isEmpty(account) || StrUtil.isEmpty(password)) {
-            return Result.fail("邮箱或密码不能为空");
+            return Result.fail("账号或密码不能为空");
         }
         //完成登录
         return userService.login(account,password);

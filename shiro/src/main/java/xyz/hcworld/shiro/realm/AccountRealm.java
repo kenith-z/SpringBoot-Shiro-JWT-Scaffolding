@@ -9,12 +9,10 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import xyz.hcworld.model.User;
 import xyz.hcworld.shiro.config.Status;
 import xyz.hcworld.util.JwtUtil;
-import xyz.hcworld.mapper.UserMapper;
 import xyz.hcworld.shiro.token.Token;
 
 import java.util.HashSet;
@@ -33,8 +31,6 @@ public class AccountRealm extends AuthorizingRealm {
 
     @Autowired
     private Status status;
-    @Autowired
-    private UserMapper userMapper;
 
 
     /**

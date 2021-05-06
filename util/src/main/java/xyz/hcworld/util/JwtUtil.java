@@ -5,12 +5,10 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import org.springframework.beans.factory.annotation.Value;
 import xyz.hcworld.model.User;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+
 
 /**
  * jwt工具

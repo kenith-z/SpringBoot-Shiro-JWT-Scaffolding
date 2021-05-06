@@ -1,7 +1,5 @@
 package xyz.hcworld.web.controller;
 
-
-
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;

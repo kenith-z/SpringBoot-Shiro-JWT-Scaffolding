@@ -1,6 +1,5 @@
 package xyz.hcworld.shiro.config;
 
-import cn.hutool.core.map.MapUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
@@ -17,8 +16,6 @@ import org.springframework.context.annotation.Configuration;
 import xyz.hcworld.shiro.filter.AuthFilter;
 import xyz.hcworld.shiro.realm.AccountRealm;
 
-
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.servlet.Filter;
