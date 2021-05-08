@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>rsa+aes</title>
+    <script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <!-- 引入 CDN Crypto.js 开始 AES加密 注意引入顺序 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/enc-base64.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/cipher-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/aes.min.js"></script>
+    <!-- 引入 CDN Crypto.js 结束 -->
+    <script src="http://passport.cnblogs.com/scripts/jsencrypt.min.js"></script>
+
+</head>
+
+<body>
+
+<div id="app">
+
+    <div>
+        publickey：{{ publicKeyInfo }}
+        response：{{ endInfo }}
+    </div>
+</div>
+<script>
+    let publicKey = ''
+    let dataC = {
+        account: '1',
+        password: '1'
+    }
+    let keyC = '1234567887654321'
+    let ivC = '1234567812345678'
+
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                publicKeyInfo: null,
+                endInfo: null
+            }
+        },
+        mounted() {
+            let ax = axios
+            ax.get('http://localhost:8080/getPublicKey')
+                .then(response => {
+                    let key = response.data.data
+                    console.log(key)
+                    //公钥
+                    this.publicKeyInfo = key
+                    publicKey = key
+
+                    let rsakeyC = rsaEn(keyC, publicKey)
+                    let account = aesEn(JSON.stringify(dataC), keyC, ivC, rsakeyC)
+                    console.log(account)
+                    let params = new FormData();
+                    params.append("encryptedData",account.encryptedData)
+                    params.append("encryptedIv",account.encryptedIv)
+                    params.append("encryptedKey",account.encryptedKey)
+                    return ax.post('http://192.168.2.154:8080/login', params)
+                }).then(response => {
+                // this.endInfo = aesDe(response.data, keyC, ivC)
+                this.endInfo = response.data
+            })
+                .catch(function (error) { // 请求失败处理
+                    console.log(error);
+                })
+        }
+    })
+
+    // 公钥加密aes秘钥
+    function rsaEn(message, publicKey) {
+        let encryptor = new JSEncrypt()  // 创建加密对象实例
+        //之前ssl生成的公钥，复制的时候要小心不要有空格
+        encryptor.setPublicKey(publicKey)//设置公钥
+        return encryptor.encrypt(message)  // 对内容进行加密
+    }
+
+    // AES加密
+    function aesEn(data, key, iv, rsakey) {
+        key = CryptoJS.enc.Utf8.parse(key)
+        iv = CryptoJS.enc.Utf8.parse(iv)
+        let encrypted = CryptoJS.AES.encrypt(data, key,
+            {
+                iv: iv,
+                mode: CryptoJS.mode.CBC,
+                padding: CryptoJS.pad.Pkcs7
+            })
+        return {
+            encryptedData: encrypted.toString(),
+            encryptedKey: rsakey,
+            encryptedIv: CryptoJS.enc.Base64.stringify(iv)
+        }
+    }
+
+    // 解密方法
+    function aesDe(data, key, iv) {
+        key = CryptoJS.enc.Utf8.parse(key)
+        iv = CryptoJS.enc.Utf8.parse(iv)
+        let decrypted = CryptoJS.AES.decrypt(data, key, {
+            iv: iv,
+            mode: CryptoJS.mode.CBC,
+            padding: CryptoJS.pad.Pkcs7
+        });
+        return decrypted.toString(CryptoJS.enc.Utf8)
+    }
+
+
+</script>
+</body>
+
+</html>

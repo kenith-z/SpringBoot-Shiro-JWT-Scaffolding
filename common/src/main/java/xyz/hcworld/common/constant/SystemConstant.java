@@ -9,6 +9,19 @@ package xyz.hcworld.common.constant;
  */
 public class SystemConstant {
 
+    /**
+     * redis中RSA的前缀
+     */
+    public static final String RSA_KEY = "rsa";
 
+    /**
+     * RSA公钥
+     */
+    public static final String PUBLIC_KEY = "rsa:publicKey";
+
+    /**
+     * RSA私钥
+     */
+    public static final String PRIVATE_KEY = "rsa:privateKey";
 
 }

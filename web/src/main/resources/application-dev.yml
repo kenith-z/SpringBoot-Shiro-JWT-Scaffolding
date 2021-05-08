@@ -10,7 +10,10 @@ spring:
     host: 192.168.2.142
     port: 6379
     password: Zhang123.
-
+# jwt的秘钥与有效时间
 jwt:
   secret: 123456
   expireTime: 86400000
+# redis键前缀
+redis:
+  prefix: zscaffold

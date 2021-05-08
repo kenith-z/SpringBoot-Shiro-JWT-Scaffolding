@@ -10,8 +10,15 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import xyz.hcworld.common.annotation.Log;
+import xyz.hcworld.common.annotation.Security;
+import xyz.hcworld.common.constant.SystemConstant;
 import xyz.hcworld.common.lang.Result;
+import xyz.hcworld.gotool.security.RsaUtils;
+import xyz.hcworld.model.Account;
 import xyz.hcworld.model.User;
+
+import javax.validation.Valid;
+import java.util.Map;
 
 
 /**
@@ -24,6 +31,15 @@ import xyz.hcworld.model.User;
 @Slf4j
 @RestController
 public class AuthController extends BaseController {
+
+    /**
+     * 获取public
+     * @return
+     */
+    @GetMapping("/getPublicKey")
+    public Result end(){
+        return Result.success(redisUtil.get(SystemConstant.PUBLIC_KEY));
+    }
 
     /**
      * 注册请求
@@ -43,16 +59,16 @@ public class AuthController extends BaseController {
         return userService.register(user);
     }
 
+    @Security(title = "登录")
     @Log(title = "登录")
     @PostMapping("/login")
-    public Result login(@RequestParam(value="account",defaultValue="") String account,
-                        @RequestParam(value="password",defaultValue="") String password) {
+    public Result login(Account account) {
         //账号密码为空
-        if (StrUtil.isEmpty(account) || StrUtil.isEmpty(password)) {
+        if (StrUtil.isEmpty(account.getAccount()) || StrUtil.isEmpty(account.getPassword())) {
             return Result.fail("账号或密码不能为空");
         }
         //完成登录
-        return userService.login(account,password);
+        return userService.login(account.getAccount(),account.getPassword());
     }
 
 

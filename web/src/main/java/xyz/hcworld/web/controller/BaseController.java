@@ -4,6 +4,7 @@ package xyz.hcworld.web.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import xyz.hcworld.service.CurrencyService;
 import xyz.hcworld.service.UserService;
+import xyz.hcworld.util.RedisUtil;
 
 /**
  * 公共控制器
@@ -23,6 +24,12 @@ public class BaseController {
      */
     @Autowired
     UserService userService;
+
+    /**
+     * redis服务
+     */
+    @Autowired
+    RedisUtil redisUtil;
 
 
 }
