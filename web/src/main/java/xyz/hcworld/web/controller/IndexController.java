@@ -5,6 +5,7 @@ import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.web.bind.annotation.*;
+import xyz.hcworld.common.annotation.Log;
 import xyz.hcworld.common.lang.Result;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class IndexController extends BaseController {
      * 首页不需要认证
      * @return
      */
+    @Log(title = "首页")
     @GetMapping({"", "/", "index"})
     public Result index() {
         List<String> list = new ArrayList<>(16);;

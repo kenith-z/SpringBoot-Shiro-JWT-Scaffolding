@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import xyz.hcworld.common.annotation.Log;
 import xyz.hcworld.common.lang.Result;
 import xyz.hcworld.model.User;
 
@@ -32,6 +33,7 @@ public class AuthController extends BaseController {
      * @return
      */
     @PostMapping("/register")
+    @Log(title = "注册")
     public Result doRegister(@Validated User user, String repass) {
         // 两次密码判断
         if (!user.getPassword().equals(repass)) {
@@ -41,6 +43,7 @@ public class AuthController extends BaseController {
         return userService.register(user);
     }
 
+    @Log(title = "登录")
     @PostMapping("/login")
     public Result login(@RequestParam(value="account",defaultValue="") String account,
                         @RequestParam(value="password",defaultValue="") String password) {
@@ -53,7 +56,7 @@ public class AuthController extends BaseController {
     }
 
 
-
+    @Log(title = "退出")
     @PostMapping(path = {"/unauthorized","/out"})
     @RequiresRoles(logical = Logical.OR, value = {"user", "admin"})
     public ResponseEntity<Result> unauthorized()  {
