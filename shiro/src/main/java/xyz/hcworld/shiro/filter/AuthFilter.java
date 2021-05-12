@@ -5,7 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMethod;
 import xyz.hcworld.shiro.token.Token;
 
@@ -23,7 +25,13 @@ import javax.servlet.http.HttpServletResponse;
  * @Version： 1.0
  */
 @Slf4j
+@Component
 public class AuthFilter extends BasicHttpAuthenticationFilter {
+    /**
+     * 请求来源
+     */
+    @Value("${response.origin}")
+    private String origin;
 
     /**
      * 如果带有 token，则对 token 进行检查，否则直接通过
@@ -35,9 +43,8 @@ public class AuthFilter extends BasicHttpAuthenticationFilter {
             //如果存在，则进入 executeLogin 方法执行登入，检查 token 是否正确
             try {
                 executeLogin(request, response);
-                return true;
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                log.error("token 检查异常：{}",e.getMessage());
             }
         }
         //如果请求头不存在 Token，则可能是执行登陆操作或者是游客状态访问，无需检查 token，直接返回 true
@@ -51,7 +58,7 @@ public class AuthFilter extends BasicHttpAuthenticationFilter {
     @Override
     protected boolean isLoginAttempt(ServletRequest request, ServletResponse response) {
         HttpServletRequest req = (HttpServletRequest) request;
-        String token = req.getHeader("token");
+        String token = req.getHeader("Authorization");
         return token != null;
     }
 
@@ -61,7 +68,7 @@ public class AuthFilter extends BasicHttpAuthenticationFilter {
     @Override
     protected boolean executeLogin(ServletRequest request, ServletResponse response) throws AuthenticationException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        String token = httpServletRequest.getHeader("token");
+        String token = httpServletRequest.getHeader("Authorization");
         Token jwtToken = new Token(token);
         // 提交给realm进行登入，如果错误他会抛出异常并被捕获
         getSubject(request, response).login(jwtToken);
@@ -76,9 +83,12 @@ public class AuthFilter extends BasicHttpAuthenticationFilter {
     protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-        httpServletResponse.setHeader("Access-control-Allow-Origin", httpServletRequest.getHeader("Origin"));
+        //请求来源
+        httpServletResponse.setHeader("Access-control-Allow-Origin", origin);
+        //提交方式
         httpServletResponse.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS,PUT,DELETE");
-        httpServletResponse.setHeader("Access-Control-Allow-Headers", httpServletRequest.getHeader("Access-Control-Request-Headers"));
+        //允许的header信息
+        httpServletResponse.setHeader("Access-Control-Allow-Headers","Origin, X-Requested-With, Content-Type, Accept,Authorization");
         // 跨域时会首先发送一个option请求，这里我们给option请求直接返回正常状态
         if (httpServletRequest.getMethod().equals(RequestMethod.OPTIONS.name())) {
             httpServletResponse.setStatus(HttpStatus.OK.value());

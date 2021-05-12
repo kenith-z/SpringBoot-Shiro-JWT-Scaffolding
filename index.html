@@ -15,6 +15,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/aes.min.js"></script>
     <!-- 引入 CDN Crypto.js 结束 -->
     <script src="http://passport.cnblogs.com/scripts/jsencrypt.min.js"></script>
+    <script src="https://cdn.bootcss.com/qs/6.5.1/qs.min.js"></script>
 
 </head>
 
@@ -25,13 +26,14 @@
     <div>
         publickey：{{ publicKeyInfo }}
         response：{{ endInfo }}
+        1：{{ messdInfo }}
     </div>
 </div>
 <script>
     let publicKey = ''
     let dataC = {
-        account: '1',
-        password: '1'
+        account: 'zhang@hcworld.xyz',
+        password: '123456',
     }
     let keyC = '1234567887654321'
     let ivC = '1234567812345678'
@@ -41,7 +43,8 @@
         data() {
             return {
                 publicKeyInfo: null,
-                endInfo: null
+                endInfo: null,
+                messdInfo:null
             }
         },
         mounted() {
@@ -57,14 +60,23 @@
                     let rsakeyC = rsaEn(keyC, publicKey)
                     let account = aesEn(JSON.stringify(dataC), keyC, ivC, rsakeyC)
                     console.log(account)
-                    let params = new FormData();
-                    params.append("encryptedData",account.encryptedData)
-                    params.append("encryptedIv",account.encryptedIv)
-                    params.append("encryptedKey",account.encryptedKey)
-                    return ax.post('http://192.168.2.154:8080/login', params)
+                    return ax.post('http://192.168.2.154:8080/login',  Qs.stringify(account),{
+                        headers:{
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        }
+                    })
+
                 }).then(response => {
                 // this.endInfo = aesDe(response.data, keyC, ivC)
                 this.endInfo = response.data
+                return  ax.get('http://localhost:8080/message',
+                    {
+                        headers: {
+                            'Authorization': response.data.data,
+                        }
+                    })
+            }).then(response => {
+                this.messdInfo = response.data
             })
                 .catch(function (error) { // 请求失败处理
                     console.log(error);

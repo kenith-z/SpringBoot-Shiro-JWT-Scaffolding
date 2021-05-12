@@ -10,6 +10,7 @@ import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -29,7 +30,6 @@ import javax.servlet.Filter;
 @Slf4j
 @Configuration
 public class ShiroConfig {
-
 
 
     /**
@@ -70,8 +70,8 @@ public class ShiroConfig {
         filterMap.put("jwt", new AuthFilter());
         factoryBean.setFilters(filterMap);
         factoryBean.setSecurityManager(securityManager);
-        // 设置无权限时跳转的 url;
-        factoryBean.setUnauthorizedUrl("/unauthorized/无权限");
+        // 设置无权限时跳转的 url
+        factoryBean.setUnauthorizedUrl("/unauthorized/401");
         Map<String, String> filterRuleMap = new LinkedHashMap<>();
 
         // 访问 /unauthorized/** 不通过JWTFilter

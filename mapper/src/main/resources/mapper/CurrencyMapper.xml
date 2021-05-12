@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="xyz.hcworld.mapper.CurrencyMapper">
+    <!-- 查询指定表的数据是否存在   -->
     <select id="selectExistence" resultType="java.lang.Integer" >
         SELECT 1
-        FROM ${tableName} ${ew.customSqlSegment} LIMIT 1
+        FROM
+        <choose>
+            <when test="tableName== 'm_user'">
+                m_user
+            </when>
+            <!-- 表不存在时，去查user表报错。 -->
+            <otherwise>
+                m_user
+            </otherwise>
+        </choose>
+        ${ew.customSqlSegment} LIMIT 1
     </select>
 </mapper>

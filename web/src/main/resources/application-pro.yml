@@ -10,4 +10,13 @@ spring:
     host: xxxxx
     port: 6379
     password: xxxxx
-
+# jwt的秘钥与有效时间
+jwt:
+  secret: 123456
+  expireTime: 86400000
+# redis键前缀
+redis:
+  prefix: zscaffold
+#跨域请求的来源
+response:
+  origin: https://www.hcworld.xyz
