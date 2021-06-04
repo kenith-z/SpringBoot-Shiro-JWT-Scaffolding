@@ -5,7 +5,9 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -35,6 +37,12 @@ import java.util.Map;
 @Component
 @Order(1)
 public class LogAspect {
+
+    /**
+     * mongodb
+     */
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     /**
      * 拦截xyz.hcworld.common.annotation.Log注解的方法
@@ -70,6 +78,7 @@ public class LogAspect {
             //异常时打印日志且不转码
             log.error("Error:{}", e.getMessage());
             map.put("url", request.getRequestURI());
+            mongoTemplate.save(e, "Error-Log-" + DateTimeUtils.getCurrentDateStr());
         }
         //获取用户ip
         map.put("ip", IpUtil.getIp(request));
@@ -85,6 +94,8 @@ public class LogAspect {
         //包路径
         map.put("classMethod", joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
         log.info("LogAspect前置增强:{}", map.toString());
+        //以LOG开头以时间为后缀存进monggodb
+        mongoTemplate.save(map, "Log-" + DateTimeUtils.getCurrentDateStr());
     }
 
     /**
@@ -121,7 +132,4 @@ public class LogAspect {
         }
         return null;
     }
-
-
-
 }

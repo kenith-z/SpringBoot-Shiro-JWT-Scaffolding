@@ -10,6 +10,10 @@ spring:
     host: xxxxx
     port: 6379
     password: xxxxx
+  # mongodb配置
+  data:
+    mongodb:
+      uri: mongodb+srv://xx:xxx@127.0.0.1/zscaffold?retryWrites=true&w=majority
 # jwt的秘钥与有效时间
 jwt:
   secret: 123456
