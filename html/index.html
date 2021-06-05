@@ -5,17 +5,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>rsa+aes</title>
-    <script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!--
+        node.js依赖导入加密库，其余库自行导入
+        npm install crypto-js --save
+        npm install jsencrypt --save
+    -->
+    <!--  vue依赖  -->
+    <script src="js/vue2.2.2.js"></script>
+    <script src="js/axios.min.js"></script>
 
-    <!-- 引入 CDN Crypto.js 开始 AES加密 注意引入顺序 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/core.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/enc-base64.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/cipher-core.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/aes.min.js"></script>
+    <!-- 引入  Crypto.js库 开始 AES加密 注意引入顺序 -->
+    <script src="js/crypto-core.js"></script>
+    <script src="js/enc-base64.min.js"></script>
+    <script src="js/cipher-core.min.js"></script>
+    <script src="js/aes.min.js"></script>
     <!-- 引入 CDN Crypto.js 结束 -->
-    <script src="http://passport.cnblogs.com/scripts/jsencrypt.min.js"></script>
-    <script src="https://cdn.bootcss.com/qs/6.5.1/qs.min.js"></script>
+    <!-- JSEncrypt库对 RSA加密  -->
+    <script src="js/jsencrypt.min.js"></script>
+    <!--  模拟表单提交的qs库  -->
+    <script src="js/qs.min.js"></script>
 
 </head>
 
